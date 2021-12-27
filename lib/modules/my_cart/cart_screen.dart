@@ -180,7 +180,7 @@ class MyCartScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '${cartModel.productModel!.price}'' EGP',
+                  '${cartModel.productModel!.price!.round()}'' EGP',
                 ),
                 cartModel.productModel!.discount
                 ?
@@ -221,7 +221,10 @@ class MyCartScreen extends StatelessWidget {
                     }
                   else
                     {
-                    AppCubit.get(context).decreaseCart(cartModel: cartModel);
+                      if(!AppCubit.get(context).removingFromCart)
+                      {
+                        AppCubit.get(context).decreaseCart(cartModel: cartModel);
+                      }
                     }
                 },
                 icon: CircleAvatar(

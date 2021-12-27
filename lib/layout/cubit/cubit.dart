@@ -456,10 +456,12 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  bool removingFromCart = false;
   void decreaseCart({
     required CartModel cartModel,
   })
   {
+    removingFromCart = true;
     emit(AppDecreaseLoadingState());
     FirebaseFirestore.instance
         .collection('users')
@@ -476,6 +478,7 @@ class AppCubit extends Cubit<AppStates> {
     }).catchError((error){
       emit(AppDecreaseErrorState());
     });
+    removingFromCart = false;
   }
 
   List<String> cart = [];
