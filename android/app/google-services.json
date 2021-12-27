@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "273848865440",
+    "project_id": "clothesmarket-4e206",
+    "storage_bucket": "clothesmarket-4e206.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273848865440:android:0f4e44f96e936a04b9afc5",
+        "android_client_info": {
+          "package_name": "com.example.clothes_shop_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "273848865440-9g199aomesqoctjq0l1fs4i9mc9cdpun.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.clothes_shop_app",
+            "certificate_hash": "ff0593488b7993514b8e6bb0f0862d4d0ac69242"
+          }
+        },
+        {
+          "client_id": "273848865440-ehqv49kle4qiu2fabokv4tmmkjepk7aj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgsxHlNiJYzecY7is2aP-st7uPGuN8H8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "273848865440-ehqv49kle4qiu2fabokv4tmmkjepk7aj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
