@@ -8,12 +8,6 @@ ThemeData lightTheme = ThemeData(
   primarySwatch: defaultColor,
   appBarTheme: const AppBarTheme(
     titleSpacing: 20,
-    titleTextStyle: TextStyle(
-      fontFamily: 'Jannah',
-      color: Colors.black,
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-    ),
     iconTheme: IconThemeData(
       color: defaultColor,
     ),
@@ -30,21 +24,5 @@ ThemeData lightTheme = ThemeData(
     unselectedItemColor: Colors.grey,
     elevation: 20.0,
     backgroundColor: Colors.white,
-  ),
-  textTheme: const TextTheme(
-      bodyText1: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
-      ),
-      subtitle1: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
-        height: 1.3,
-      ),
-      caption: TextStyle(
-        color: Colors.black38,
-      ),
   ),
 );
