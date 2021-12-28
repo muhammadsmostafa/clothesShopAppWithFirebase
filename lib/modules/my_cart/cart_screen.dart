@@ -215,16 +215,13 @@ class MyCartScreen extends StatelessWidget {
               IconButton(
                 onPressed: ()
                 {
-                  if(cartModel.quantity == 1)
+                  if(cartModel.quantity <= 1)
                     {
                       showToast(message: 'If you really want to remove this item tap remove', time: 10);
                     }
                   else
                     {
-                      if(!AppCubit.get(context).removingFromCart)
-                      {
                         AppCubit.get(context).decreaseCart(cartModel: cartModel);
-                      }
                     }
                 },
                 icon: CircleAvatar(

@@ -306,6 +306,7 @@ class AppCubit extends Cubit<AppStates> {
 
   List<String> favorites=[];
   void getFavorites() {
+    favorites=[];
     emit(AppGetFavoriteLoadingState());
     FirebaseFirestore.instance
         .collection('users')
@@ -456,21 +457,19 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  bool removingFromCart = false;
   void decreaseCart({
     required CartModel cartModel,
   })
-  {
-    removingFromCart = true;
+   {
     emit(AppDecreaseLoadingState());
-    FirebaseFirestore.instance
+     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
         .collection('cart')
         .doc(cartModel.productModel!.productId)
         .collection('sizes')
         .doc(cartModel.size)
-        .update({'quantity' : FieldValue.increment(-1)})
+        .update({'quantity' : cartModel.quantity ==1 ? 1 : FieldValue.increment(-1)})
         .then((value){
       cartModel.quantity--;
       totalPriceOfCartItems -= cartModel.productModel!.price!;
@@ -478,7 +477,6 @@ class AppCubit extends Cubit<AppStates> {
     }).catchError((error){
       emit(AppDecreaseErrorState());
     });
-    removingFromCart = false;
   }
 
   List<String> cart = [];
@@ -506,6 +504,8 @@ class AppCubit extends Cubit<AppStates> {
   void getCartProductModel()
   {
     cartProductModel=[];
+    cartModel=[];
+    totalPriceOfCartItems=0;
     emit(AppGetCartProductModelLoadingState());
     for (var element in cart) {
       FirebaseFirestore.instance
@@ -529,7 +529,6 @@ class AppCubit extends Cubit<AppStates> {
   List<CartModel> cartModel =[];
   void getCartScreen()
   {
-    cartModel=[];
     emit(AppGetCartScreenLoadingState());
     for (var element in cartProductModel) {
       FirebaseFirestore.instance
