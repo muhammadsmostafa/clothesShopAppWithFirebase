@@ -75,6 +75,7 @@ class MyApp extends StatelessWidget {
               AppCubit.get(context).getProducts();
               AppCubit.get(context).getFavorites();
               AppCubit.get(context).getCart();
+              AppCubit.get(context).getAdmins();
             }
           return MaterialApp(
             debugShowCheckedModeBanner: false,

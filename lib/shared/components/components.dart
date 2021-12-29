@@ -1,5 +1,6 @@
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
+import 'package:clothes_shop_app/modules/edit_product/edit_product_screen.dart';
 import 'package:clothes_shop_app/modules/product/product_screen.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
 import 'package:clothes_shop_app/shared/styles/icon_broken.dart';
@@ -239,7 +240,7 @@ Widget buildGridProduct(ProductModel productModel, context, List favorites , boo
                             color: Colors.grey[300],
                           )),
                     )
-                        :
+                    :
                     const SizedBox(),
                   ],
                 ),
@@ -280,34 +281,64 @@ Widget buildGridProduct(ProductModel productModel, context, List favorites , boo
                           const Spacer(),
                           favoriteScreen
                           ?
+                           AppCubit.get(context).adminsId.contains(AppCubit.get(context).userModel!.uId)
+                              ?
+                          IconButton(
+                              onPressed:()
+                              {
+                                navigateTo(context, EditProductScreen(model: productModel));
+                              },
+                              icon: const Icon(
+                                IconBroken.Edit,
+                                color: defaultColor,
+                              )
+                          )
+                              :
                               const SizedBox()
                           :
-                          IconButton(
-                            onPressed: ()
-                            {
-                              if (favorite)
+                          Row(
+                            children: [
+                              AppCubit.get(context).adminsId.contains(AppCubit.get(context).userModel!.uId)
+                                  ?
+                              IconButton(
+                                  onPressed: ()
+                                  {
+                                    navigateTo(context, EditProductScreen(model: productModel,));
+                                  },
+                                  icon: const Icon(
+                                    IconBroken.Edit,
+                                    color: defaultColor,
+                                  ))
+                                  :
+                                  const SizedBox(),
+                              IconButton(
+                                onPressed: ()
                                 {
-                                  AppCubit.get(context).removeProductFromFavorites(productModel: productModel);
-                                }
-                              else
-                                {
-                                  AppCubit.get(context).addProductToFavorites(productModel: productModel);
-                                }
-                            },
-                            icon: CircleAvatar(
-                                radius: 15,
-                                backgroundColor:
-                                favorite
-                                    ?
-                                Colors.pink
-                                    :
-                                Colors.grey
-                                ,
-                                child: const Icon(
-                                  IconBroken.Heart,
-                                  size: 20,
-                                  color: Colors.white,
-                                )),
+                                  if (favorite)
+                                    {
+                                      AppCubit.get(context).removeProductFromFavorites(productModel: productModel);
+                                    }
+                                  else
+                                    {
+                                      AppCubit.get(context).addProductToFavorites(productModel: productModel);
+                                    }
+                                },
+                                icon: CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor:
+                                    favorite
+                                        ?
+                                    Colors.pink
+                                        :
+                                    Colors.grey
+                                    ,
+                                    child: const Icon(
+                                      IconBroken.Heart,
+                                      size: 20,
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            ],
                           )
                         ],
                       ),

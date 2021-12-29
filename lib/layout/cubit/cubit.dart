@@ -31,6 +31,99 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  String? userIdToBeAdmin;
+  bool foundIt = false;
+  void addAdmin({
+  required String email,
+  })
+  {
+    foundIt = false;
+    emit(AppAddAdminsLoadingState());
+    FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((value){
+          for (var element in value.docs) {
+            if(element.data()['email'] == email)
+              {
+                userIdToBeAdmin = element.id;
+                foundIt = true;
+                break;
+              }
+          }}
+          ).then((value){
+            if(foundIt)
+              {
+                adminsId.add('$userIdToBeAdmin');
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userIdToBeAdmin)
+                    .get()
+                    .then((value){
+                  FirebaseFirestore.instance
+                      .collection('admins')
+                      .doc(userIdToBeAdmin)
+                      .set({'admin': true});
+                  admins.add(UserModel.fromJson(value.data()));
+                }).then((value){
+                  userIdToBeAdmin = null;
+                  emit(AppAddAdminsSuccessState());
+                });
+              }
+            else{
+              emit(AppAddAdminsErrorState());
+            }
+    }).catchError((error){
+      emit(AppAddAdminsErrorState());
+    });
+  }
+
+
+  void removeAdmin({
+    required String userId,
+  })
+  {
+    emit(AppDeleteAdminsLoadingState());
+    FirebaseFirestore.instance
+        .collection('admins')
+        .doc(userId)
+        .delete().then((value){
+          adminsId.remove(userId);
+          admins.removeWhere((element) => userId == element.uId);
+    }).then((value){
+      emit(AppDeleteAdminsSuccessState());
+    }).catchError((error){
+      emit(AppDeleteAdminsErrorState());
+    });
+  }
+
+  List<UserModel> admins=[];
+  List<String> adminsId=[];
+  void getAdmins()
+  {
+    admins=[];
+    adminsId=[];
+    emit(AppGetAdminsLoadingState());
+    FirebaseFirestore.instance
+        .collection('admins')
+        .get()
+        .then((value){
+          for (var element in value.docs) {
+            adminsId.add(element.id);
+           FirebaseFirestore.instance
+            .collection('users')
+            .doc(element.id)
+            .get()
+            .then((value){
+              admins.add(UserModel.fromJson(value.data()));
+           });
+          }}).then((value){
+      emit(AppGetAdminsSuccessState());
+    }).catchError((error){
+      emit(AppGetAdminsErrorState());
+    });
+  }
+
   var picker = ImagePicker();
   Future<void> getProductImage() async {
     var pickedFile = await picker.pickImage(
@@ -58,7 +151,7 @@ class AppCubit extends Cubit<AppStates> {
 
   File? profileImage;
   void removeProfileImage() {
-    productImage = null;
+    profileImage = null;
     emit(AppRemoveProductImageSuccessState());
   }
 
@@ -88,7 +181,7 @@ class AppCubit extends Cubit<AppStates> {
         );
       });
     }).catchError((error){
-      emit(AppUploadProductImagePickedErrorState());
+      emit(AppUploadProfileImagePickedErrorState());
     });
   }
 
@@ -128,6 +221,8 @@ class AppCubit extends Cubit<AppStates> {
 
   bool addingProduct = false;
   void uploadProductImage({
+    required bool update,
+    required String productId,
     required String productName,
     required String? description,
     required double? oldPrice,
@@ -149,6 +244,19 @@ class AppCubit extends Cubit<AppStates> {
           .then((value) {
         emit(AppUploadProductImagePickedSuccessState());
         removeProductImage();
+        update
+        ?
+        updateProduct(
+          productName: productName,
+          productId: productId,
+          description: description,
+          oldPrice: oldPrice,
+          price: price,
+          productMainImage: value,
+          discount: discount,
+          sizesOfThisProduct: sizesOfThisProduct,
+        )
+        :
         addProduct(
             productName: productName,
             description: description,
@@ -164,8 +272,57 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  String? selectedSize;
+  void updateProduct({
+    required String productName,
+    required String? description,
+    required String productId,
+    required double? oldPrice,
+    required double price,
+    required String? productMainImage,
+    required bool discount,
+    required List<String> sizesOfThisProduct,
+  })
+  {
+    addingProduct = true;
+    emit(AppUpdateProductLoadingState());
+    ProductModel productModel = ProductModel(
+      productName: productName,
+      description: description,
+      oldPrice: oldPrice,
+      price: price,
+      productMainImage: productMainImage,
+      discount: discount,
+      sizesOfThisProduct: sizesOfThisProduct,
+      productId: productId,
+    );
+    FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId)
+        .set(productModel.toMap())
+        .then((value){
+      emit(AppUpdateProductSuccessState());
+    }).catchError((error){
+      emit(AppUpdateProductErrorState());
+    });
+    addingProduct = false;
+  }
 
+  void deleteProduct({
+  required String productId
+  })
+  {
+    emit(AppDeleteProductLoadingState());
+    FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId)
+        .delete().then((value){
+      emit(AppDeleteProductSuccessState());
+    }).catchError((error){
+      emit(AppDeleteProductErrorState());
+    });
+  }
+
+  String? selectedSize;
   void onSizeSelected({
   required String size,
   })
@@ -177,17 +334,12 @@ class AppCubit extends Cubit<AppStates> {
   Future<void> logout()
   async {
     emit(AppLogoutLoadingState());
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uId)
-        .update({'token': ''}).then((value) {
       CasheHelper.saveData(key: 'uId', value: '');
       uId = '';
       FirebaseAuth.instance.signOut()
           .then((value) {
         emit(AppLogoutSuccessState());
       });
-    });
   }
 
   int sizesCount = 0;

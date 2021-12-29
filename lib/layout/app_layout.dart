@@ -1,6 +1,7 @@
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/modules/add_product/add_product_screen.dart';
+import 'package:clothes_shop_app/modules/administration/administration_screen.dart';
 import 'package:clothes_shop_app/modules/favorites/favorites_screen.dart';
 import 'package:clothes_shop_app/modules/my_account//my_account_screen.dart';
 import 'package:clothes_shop_app/modules/my_cart/cart_screen.dart';
@@ -22,9 +23,8 @@ class AppLayout extends StatelessWidget {
         var userModel = AppCubit.get(context).userModel;
         var productModel = AppCubit.get(context).productModel;
         var favorites = AppCubit.get(context).favorites;
-        return userModel!=null && productModel.isNotEmpty
-        ?
-        Container(
+        if (userModel!=null && productModel.isNotEmpty) {
+          return Container(
           decoration: const BoxDecoration(
             color: defaultColor,
             borderRadius: BorderRadius.horizontal(
@@ -127,9 +127,8 @@ class AppLayout extends StatelessWidget {
                               child: ListView(
                                 children: [
                                   const SizedBox(height: 10,),
-                                  userModel.admin ?? false
-                                      ?
-                                  Column(
+                                  if (AppCubit.get(context).adminsId.contains(userModel.uId))
+                                    Column(
                                     children: [
                                       drawerItem(
                                         icon: IconBroken.Plus,
@@ -141,9 +140,21 @@ class AppLayout extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 30,),
                                     ],
-                                  )
-                                      :
-                                  const SizedBox(),
+                                  ),
+                                  if(userModel.admin)
+                                    Column(
+                                      children: [
+                                        drawerItem(
+                                          icon: Icons.admin_panel_settings,
+                                          text: 'Administration',
+                                          onTap: ()
+                                          {
+                                            navigateTo(context, const AdministrationScreen());
+                                          },
+                                        ),
+                                        const SizedBox(height: 30,),
+                                      ],
+                                    ),
                                   drawerItem(
                                     icon: IconBroken.Profile,
                                     text: 'My Account',
@@ -183,13 +194,6 @@ class AppLayout extends StatelessWidget {
                                   const SizedBox(height: 30,),
                                   drawerItem(
                                     icon: IconBroken.Chat,
-                                    text: 'My Chats',
-                                    onTap: ()
-                                    {},
-                                  ),
-                                  const SizedBox(height: 30,),
-                                  drawerItem(
-                                    icon: IconBroken.Paper_Plus,
                                     text: 'Help',
                                     onTap: ()
                                     {},
@@ -204,11 +208,7 @@ class AppLayout extends StatelessWidget {
                                   const SizedBox(height: 30,),
                                   drawerItem(
                                     icon: IconBroken.Logout,
-                                    text: state is AppLogoutLoadingState
-                                    ?
-                                    'Logging out ...'
-                                    :
-                                    'Logout',
+                                    text: 'Logout',
                                     onTap: ()
                                     {
                                       AppCubit.get(context).logout().then((value){
@@ -243,12 +243,13 @@ class AppLayout extends StatelessWidget {
               ),
             ),
           ),
-        )
-        :
-        Container(
+        );
+        } else {
+          return Container(
           color: Colors.white,
           child: const Center(child: CircularProgressIndicator()),
         );
+        }
       }
     );
   }

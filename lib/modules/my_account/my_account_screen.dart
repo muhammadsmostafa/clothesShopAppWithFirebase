@@ -134,13 +134,6 @@ class MyAccountScreen extends StatelessWidget {
                           [
                             const SizedBox(height: 30,),
                             buildItem(
-                              icon: IconBroken.Message,
-                              text: 'Manage Email',
-                              onTap: ()
-                              {},
-                            ),
-                            const SizedBox(height: 30,),
-                            buildItem(
                               icon: IconBroken.Shield_Done,
                               text: 'Manage Password',
                               onTap: ()

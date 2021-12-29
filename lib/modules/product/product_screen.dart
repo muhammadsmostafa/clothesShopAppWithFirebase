@@ -1,6 +1,7 @@
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
+import 'package:clothes_shop_app/modules/edit_product/edit_product_screen.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
 import 'package:clothes_shop_app/shared/styles/icon_broken.dart';
@@ -43,17 +44,14 @@ class ProductScreen extends StatelessWidget {
                   Builder(
                     builder: (context) {
                       bool favorite = false;
-                      for (var element in favorites) {
-                        if(element == productModel.productId)
-                        {
-                          favorite = true;
-                          break;
-                        }
-                        else
+                      if (favorites.contains(productModel.productId))
+                      {
+                        favorite = true;
+                      }
+                      else
                         {
                           favorite = false;
                         }
-                      }
                       return Row(
                         children:
                         [
@@ -68,6 +66,20 @@ class ProductScreen extends StatelessWidget {
                                 color: Colors.white,
                               )),
                           const Spacer(),
+                          AppCubit.get(context).adminsId.contains(AppCubit.get(context).userModel!.uId)
+                              ?
+                          IconButton(
+                              onPressed:()
+                              {
+                                navigateTo(context, EditProductScreen(model: productModel));
+                              },
+                              icon: const Icon(
+                                IconBroken.Edit,
+                                color: Colors.white,
+                              )
+                          )
+                          :
+                              const SizedBox(),
                           IconButton(
                             onPressed: ()
                             {

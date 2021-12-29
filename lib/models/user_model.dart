@@ -5,7 +5,7 @@ class UserModel
   String? phone;
   String? uId;
   String? image;
-  bool? admin;
+  late bool admin;
 
   UserModel({
     required this.name,

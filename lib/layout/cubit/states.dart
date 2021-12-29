@@ -18,6 +18,12 @@ class AppAddProductSuccessState extends AppStates {}
 
 class AppAddProductErrorState extends AppStates {}
 
+class AppUpdateProductLoadingState extends AppStates {}
+
+class AppUpdateProductSuccessState extends AppStates {}
+
+class AppUpdateProductErrorState extends AppStates {}
+
 class AppChangeDiscountAvailabilityState extends AppStates {}
 
 class AppUploadProductImagePickedLoadingState extends AppStates {}
@@ -72,6 +78,8 @@ class AppUploadProfileImagePickedLoadingState extends AppStates {}
 
 class AppUploadProfileImagePickedSuccessState extends AppStates {}
 
+class AppUploadProfileImagePickedErrorState extends AppStates {}
+
 class AppUpdateAccountLoadingState extends AppStates {}
 
 class AppUpdateAccountSuccessState extends AppStates {}
@@ -121,3 +129,27 @@ class AppGetCartProductModelSuccessState extends AppStates {}
 class AppGetCartProductModelLoadingState extends AppStates {}
 
 class AppGetCartProductModelErrorState extends AppStates {}
+
+class AppDeleteProductLoadingState extends AppStates {}
+
+class AppDeleteProductSuccessState extends AppStates {}
+
+class AppDeleteProductErrorState extends AppStates {}
+
+class AppGetAdminsLoadingState extends AppStates {}
+
+class AppGetAdminsSuccessState extends AppStates {}
+
+class AppGetAdminsErrorState extends AppStates {}
+
+class AppDeleteAdminsLoadingState extends AppStates {}
+
+class AppDeleteAdminsSuccessState extends AppStates {}
+
+class AppDeleteAdminsErrorState extends AppStates {}
+
+class AppAddAdminsLoadingState extends AppStates {}
+
+class AppAddAdminsSuccessState extends AppStates {}
+
+class AppAddAdminsErrorState extends AppStates {}

@@ -110,13 +110,18 @@ class ForgotPasswordScreen extends StatelessWidget {
                                 child: defaultButton(
                                     function: ()
                                     {
-                                      LoginCubit.get(context).userForgotPassword(email: emailController.text);
-                                      Navigator.pop(context);
-                                      showToast(
-                                      message:
-                                      'We send password change link to you email address, reset your password and login',
-                                      time: 10
-                                      );
+                                      if(formKey.currentState!.validate())
+                                      {
+                                        LoginCubit.get(context)
+                                            .userForgotPassword(
+                                            email: emailController.text);
+                                        Navigator.pop(context);
+                                        showToast(
+                                            message:
+                                            'We send password change link to you email address, reset your password and login',
+                                            time: 10
+                                        );
+                                      }
                                     },
                                     text: 'Send'
                                 ),

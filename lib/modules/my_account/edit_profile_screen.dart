@@ -91,13 +91,28 @@ class EditProfileScreen extends StatelessWidget {
                                     ),
                                   )
                                   :
-                                  CircleAvatar(
-                                    radius: 122,
-                                    backgroundColor: Colors.white,
-                                    child:  CircleAvatar(
-                                      radius: 120,
-                                      backgroundImage: FileImage(profileImage),
-                                    ),
+                                  Stack(
+                                    alignment: AlignmentDirectional.topEnd,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 122,
+                                        backgroundColor: Colors.white,
+                                        child:  CircleAvatar(
+                                          radius: 120,
+                                          backgroundImage: FileImage(profileImage),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: ()
+                                        {
+                                          AppCubit.get(context).removeProfileImage();
+                                        },
+                                        icon: const Icon(
+                                          Icons.remove,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                   IconButton(
                                     onPressed: ()
