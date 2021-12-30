@@ -67,7 +67,7 @@ class AddProductScreen extends StatelessWidget {
                               color: Colors.white,
                             )),
                         const Text(
-                          'ADD PRODUCT',
+                          'Add Product',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 17

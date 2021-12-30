@@ -50,7 +50,7 @@ class AddAdminScreen extends StatelessWidget {
                             color: Colors.white,
                           )),
                       const Text(
-                        'ADMINISTRATOR',
+                        'Administration',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 17

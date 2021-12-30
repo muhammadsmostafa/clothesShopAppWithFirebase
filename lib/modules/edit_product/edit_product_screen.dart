@@ -59,6 +59,7 @@ class EditProductScreen extends StatelessWidget {
             async {
               Navigator.pop(context);
               AppCubit.get(context).sizesCount=0;
+              AppCubit.get(context).discount=false;
               AppCubit.get(context).removeProductImage();
               return true;
             },
@@ -78,13 +79,14 @@ class EditProductScreen extends StatelessWidget {
                               Navigator.pop(context);
                               AppCubit.get(context).sizesCount=0;
                               AppCubit.get(context).removeProductImage();
+                              AppCubit.get(context).discount=false;
                             },
                             icon: const Icon(
                               IconBroken.Arrow___Left,
                               color: Colors.white,
                             )),
                         const Text(
-                          'Update PRODUCT',
+                          'Update Product',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 17
