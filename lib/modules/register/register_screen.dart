@@ -28,7 +28,7 @@ class RegisterScreen extends StatelessWidget {
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state)
         {
-          if(state is RegisterSuccessState)
+          if(state is UploadProfileImagePickedSuccessState)
           {
             uId = FirebaseAuth.instance.currentUser!.uid;
             CasheHelper.saveData(
@@ -46,6 +46,7 @@ class RegisterScreen extends StatelessWidget {
         },
         builder: (context, state)
         {
+          var profileImage = RegisterCubit.get(context).profileImage;
           return Scaffold(
             backgroundColor: defaultColor,
             body: Column(
@@ -113,6 +114,61 @@ class RegisterScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            Stack(
+                              alignment: AlignmentDirectional.bottomEnd,
+                              children: [
+                                profileImage == null
+                                    ?
+                                const CircleAvatar(
+                                  radius: 81,
+                                  backgroundColor: defaultColor,
+                                  child:  Icon(
+                                    IconBroken.Profile,
+                                    color: Colors.white,
+                                    size: 80,
+                                  )
+                                )
+                                    :
+                                Stack(
+                                  alignment: AlignmentDirectional.topEnd,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: FileImage(profileImage),
+                                    ),
+                                    IconButton(
+                                      onPressed: ()
+                                      {
+                                        RegisterCubit.get(context).removeProfileImage();
+                                      },
+                                      icon: const CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: Colors.grey,
+                                      child: Icon(
+                                        Icons.remove,
+                                        size: 23,
+                                      ),
+                                    ),
+                                    )
+                                  ],
+                                ),
+                                IconButton(
+                                  onPressed: ()
+                                  {
+                                    RegisterCubit.get(context).getProfileImage();
+                                  },
+                                  icon: const CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.grey,
+                                    child: Icon(
+                                      IconBroken.Camera,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 15,),
                             defaultFormField(
                               controller: nameController,
                               type: TextInputType.name,
@@ -222,13 +278,13 @@ class RegisterScreen extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                             ),
-                            state is RegisterLoadingState
-                                ?
-                            const Center(child: CircularProgressIndicator())
-                                :
                             defaultButton(
                               function: () {
-                                if(formKey.currentState!.validate())
+                                if(profileImage==null)
+                                  {
+                                    showToast(message: 'you must select profile image');
+                                  }
+                                if(formKey.currentState!.validate() && profileImage != null)
                                 {
                                   RegisterCubit.get(context).userRegister(
                                     name: nameController.text,
@@ -238,8 +294,9 @@ class RegisterScreen extends StatelessWidget {
                                   );
                                 }
                               },
-                              text: 'register',
+                              text: RegisterCubit.get(context).registeringAccount ? 'registering ...' : 'register',
                             ),
+                            const SizedBox(height: 15,),
                           ],
                         ),
                       ),

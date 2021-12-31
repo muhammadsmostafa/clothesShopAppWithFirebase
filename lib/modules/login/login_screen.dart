@@ -171,11 +171,7 @@ class LoginScreen extends StatelessWidget {
                               height: 20,
                             ),
                             Center(
-                                child: state is LoginLoadingState
-                                    ?
-                                const Center(child: CircularProgressIndicator())
-                                    :
-                                defaultButton(
+                                child: defaultButton(
                                     function: ()
                                     {
                                       if(formKey.currentState!.validate())
@@ -186,7 +182,7 @@ class LoginScreen extends StatelessWidget {
                                         );
                                       }
                                     },
-                                    text: 'sign in'
+                                    text: state is LoginLoadingState ? 'signing in ...' : 'sign in'
                                 )
                             ),
                             const SizedBox(

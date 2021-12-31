@@ -200,13 +200,6 @@ class AppLayout extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 30,),
                                   drawerItem(
-                                    icon: IconBroken.Setting,
-                                    text: 'Settings',
-                                    onTap: ()
-                                    {},
-                                  ),
-                                  const SizedBox(height: 30,),
-                                  drawerItem(
                                     icon: IconBroken.Logout,
                                     text: 'Logout',
                                     onTap: ()

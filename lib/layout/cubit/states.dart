@@ -34,6 +34,8 @@ class AppUploadProductImagePickedSuccessState extends AppStates {}
 
 class AppRemoveProductImageSuccessState extends AppStates {}
 
+class AppRemoveProfileImageSuccessState extends AppStates {}
+
 class AppProductImagePickedSuccessState extends AppStates {}
 
 class AppProductImagePickedErrorState extends AppStates {}

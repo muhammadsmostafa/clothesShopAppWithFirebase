@@ -152,7 +152,7 @@ class AppCubit extends Cubit<AppStates> {
   File? profileImage;
   void removeProfileImage() {
     profileImage = null;
-    emit(AppRemoveProductImageSuccessState());
+    emit(AppRemoveProfileImageSuccessState());
   }
 
   bool updatingAccount = false;
@@ -173,7 +173,7 @@ class AppCubit extends Cubit<AppStates> {
       value.ref.getDownloadURL()
           .then((value) {
         emit(AppUploadProfileImagePickedSuccessState());
-        removeProductImage();
+        removeProfileImage();
         updateAccount(
             name: name,
             phone: phone,

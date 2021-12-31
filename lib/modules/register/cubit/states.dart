@@ -12,4 +12,16 @@ class CreateUserSuccessState extends RegisterStates {}
 
 class CreateUserErrorState extends RegisterStates {}
 
+class ProfileImagePickedSuccessState extends RegisterStates {}
+
+class ProfileImagePickedErrorState extends RegisterStates {}
+
+class UploadProfileImagePickedSuccessState extends RegisterStates {}
+
+class UploadProfileImagePickedErrorState extends RegisterStates {}
+
+class RemoveProfileImageSuccessState extends RegisterStates {}
+
+class UploadProfileImagePickedLoadingState extends RegisterStates {}
+
 class RegisterChangePasswordVisibilityState extends RegisterStates{}
