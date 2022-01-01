@@ -79,7 +79,7 @@ class SearchScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 1,
                     crossAxisSpacing: 1,
-                    childAspectRatio: 1 / 1.45,
+                    childAspectRatio: (MediaQuery.of(context).size.width*0.5) / ((MediaQuery.of(context).size.width*0.5)+91),
                     children: List.generate(
                       searchModel.length,
                           (index) => buildGridProduct(searchModel[index], context, favorites, false),
