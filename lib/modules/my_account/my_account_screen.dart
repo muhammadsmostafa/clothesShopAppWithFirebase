@@ -1,6 +1,7 @@
 import 'package:clothes_shop_app/layout/app_layout.dart';
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
+import 'package:clothes_shop_app/modules/change_password/change_password_screen.dart';
 import 'package:clothes_shop_app/modules/my_account/edit_profile_screen.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
@@ -128,33 +129,26 @@ class MyAccountScreen extends StatelessWidget {
                           top: Radius.circular(30),
                         ),
                       ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children:
-                          [
-                            const SizedBox(height: 30,),
-                            buildItem(
-                              icon: IconBroken.Shield_Done,
-                              text: 'Manage Password',
-                              onTap: ()
-                              {},
-                            ),
-                            const SizedBox(height: 30,),
-                            buildItem(
-                              icon: IconBroken.Location,
-                              text: 'Manage Address',
-                              onTap: ()
-                              {},
-                            ),
-                            const SizedBox(height: 30,),
-                            buildItem(
-                              icon: Icons.payment,
-                              text: 'Update Payment',
-                              onTap:()
-                              {},
-                            ),
-                          ],
-                        ),
+                      child: Column(
+                        children:
+                        [
+                          const SizedBox(height: 30,),
+                          buildItem(
+                            icon: IconBroken.Shield_Done,
+                            text: 'Manage Password',
+                            onTap: ()
+                            {
+                              navigateTo(context, const ChangePasswordScreen());
+                            },
+                          ),
+                          const SizedBox(height: 30,),
+                          buildItem(
+                            icon: IconBroken.Location,
+                            text: 'Manage Address',
+                            onTap: ()
+                            {},
+                          ),
+                        ],
                       )
                     ),
                   ),

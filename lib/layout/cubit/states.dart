@@ -155,3 +155,11 @@ class AppAddAdminsLoadingState extends AppStates {}
 class AppAddAdminsSuccessState extends AppStates {}
 
 class AppAddAdminsErrorState extends AppStates {}
+
+class AppChangePasswordVisibilityState extends AppStates {}
+
+class AppChangePasswordLoadingState extends AppStates {}
+
+class AppChangePasswordSuccessState extends AppStates {}
+
+class AppChangePasswordErrorState extends AppStates {}

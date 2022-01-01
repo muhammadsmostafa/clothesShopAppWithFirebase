@@ -3,10 +3,13 @@ import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/models/cart_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
 import 'package:clothes_shop_app/models/user_model.dart';
+import 'package:clothes_shop_app/shared/components/components.dart';
 import 'package:clothes_shop_app/shared/components/constants.dart';
 import 'package:clothes_shop_app/shared/network/local/cashe_helper.dart';
+import 'package:clothes_shop_app/shared/styles/icon_broken.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -719,4 +722,68 @@ class AppCubit extends Cubit<AppStates> {
         totalPriceOfCartItems += singleItemPrice;
       }
     }
+
+  IconData currentSuffix = IconBroken.Shield_Done;
+  bool isCurrentPassword = true;
+
+  void changeCurrentPasswordVisibility()
+  {
+    isCurrentPassword = !isCurrentPassword;
+    currentSuffix = isCurrentPassword ? IconBroken.Shield_Done : IconBroken.Shield_Fail;
+    emit(AppChangePasswordVisibilityState());
+  }
+
+  IconData newSuffix = IconBroken.Shield_Done;
+  bool isNewPassword = true;
+
+  void changeNewPasswordVisibility()
+  {
+    isNewPassword = !isNewPassword;
+    newSuffix = isNewPassword ? IconBroken.Shield_Done : IconBroken.Shield_Fail;
+    emit(AppChangePasswordVisibilityState());
+  }
+
+  IconData suffixConfirm = IconBroken.Shield_Done;
+  bool isConfirmPassword = true;
+
+  void changeConfirmPasswordVisibility()
+  {
+    isConfirmPassword = !isConfirmPassword;
+    suffixConfirm = isConfirmPassword ? IconBroken.Shield_Done : IconBroken.Shield_Fail;
+    emit(AppChangePasswordVisibilityState());
+  }
+
+  void resetPasswordSuffixAndVisibility()
+  {
+    currentSuffix = IconBroken.Shield_Done;
+    isCurrentPassword = true;
+    newSuffix = IconBroken.Shield_Done;
+    isNewPassword = true;
+    suffixConfirm = IconBroken.Shield_Done;
+    isConfirmPassword = true;
+  }
+
+  void changePassword({
+    required String currentPassword,
+    required String newPassword,
+  })
+  {
+    emit(AppChangePasswordLoadingState());
+    FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: '${FirebaseAuth.instance.currentUser!.email}',
+        password: currentPassword
+    ).then((value)
+    {
+      FirebaseAuth.instance.currentUser!.updatePassword(newPassword).then((value){
+        emit(AppChangePasswordSuccessState());
+      });
+    }).catchError((error){
+      if (error.code == 'wrong-password') {
+        showToast(message: 'Current Password Wrong');
+      }
+      emit(AppChangePasswordErrorState());
+    }).catchError((error){
+      emit(AppChangePasswordErrorState());
+    });
+  }
 }
