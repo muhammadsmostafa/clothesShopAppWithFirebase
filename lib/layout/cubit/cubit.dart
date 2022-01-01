@@ -786,7 +786,7 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppChangePasswordErrorState());
     });
   }
-  
+
   List<ProductModel> searchModel=[];
   void getSearch({
     required String searchWord,
@@ -798,11 +798,16 @@ class AppCubit extends Cubit<AppStates> {
     .snapshots()
     .listen((event) {
       for (var element in event.docs) {
-        if(element.data().toString().toLowerCase().contains(searchWord))
+        if(element.data()['description'].toString().toLowerCase().contains(searchWord)||element.data()['productName'].toString().toLowerCase().contains(searchWord))
           {
             searchModel.add(ProductModel.fromJson(element.data()));
           }
         emit(AppGetSearchSuccessState());
       }});
+  }
+
+  void setState()
+  {
+    emit(AppSetState());
   }
 }

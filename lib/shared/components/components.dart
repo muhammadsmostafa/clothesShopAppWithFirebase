@@ -140,15 +140,17 @@ Widget defaultTextButton({
 
 void navigateTo(context , widget) => Navigator.push(
   context,
-  MaterialPageRoute(
-    builder: (context) => widget,
+  PageRouteBuilder(
+      pageBuilder: (context, animation1, animation2) => widget,
+      transitionDuration: Duration.zero
   ),
 );
 
 Future <void> navigateAndFinish(context , widget) => Navigator.pushAndRemoveUntil(
     context,
-    MaterialPageRoute(
-      builder: (context) => widget,
+    PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => widget,
+        transitionDuration: Duration.zero
     ),
         (route)
     {

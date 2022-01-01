@@ -24,30 +24,52 @@ class SearchScreen extends StatelessWidget {
               },
               child: Scaffold(
                 appBar: AppBar(
-                    title: Container(
-                      height: 35,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: TextField(
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            hintText: 'Search',
-                            border: InputBorder.none
+                    title: Stack(
+                      alignment: AlignmentDirectional.centerEnd,
+                      children: [
+                        Container(
+                          height: 35,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ),
                           ),
-                          controller: searchController,
-                          onSubmitted: (value)
-                          {
-                            AppCubit.get(context).getSearch(searchWord: searchController.text.toLowerCase());
-                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: TextField(
+                              autofocus: true,
+                              decoration: const InputDecoration(
+                                hintText: 'Search',
+                                border: InputBorder.none
+                              ),
+                              onChanged: (value){
+                                AppCubit.get(context).setState();
+                              },
+                              controller: searchController,
+                              onSubmitted: (value)
+                              {
+                                if(value.isNotEmpty)
+                                {
+                                  AppCubit.get(context).getSearch(searchWord: searchController.text.toLowerCase());
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                        if(searchController.value.text.isNotEmpty)
+                          IconButton(
+                              onPressed: ()
+                              {
+                                searchController.clear();
+                                AppCubit.get(context).setState();
+                              },
+                              icon: const Icon(
+                                Icons.clear,
+                                color: Colors.grey
+                              ))
+                      ],
                     )
                 ),
                 body: SingleChildScrollView(
