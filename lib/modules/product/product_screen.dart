@@ -111,7 +111,9 @@ class ProductScreen extends StatelessWidget {
                     }
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10
+                    ),
                     child: Image(
                       height: MediaQuery.of(context).size.height * 0.4,
                       width: MediaQuery.of(context).size.height * 0.4,

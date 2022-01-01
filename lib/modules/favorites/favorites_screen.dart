@@ -31,7 +31,7 @@ class FavoritesScreen extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.07,
+                    height: 50,
                     child: Row(
                       children:
                       [
@@ -74,7 +74,7 @@ class FavoritesScreen extends StatelessWidget {
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 1,
                                 crossAxisSpacing: 1,
-                                childAspectRatio: 1 / 1.45,
+                                childAspectRatio: (MediaQuery.of(context).size.width*0.5) / ((MediaQuery.of(context).size.width*0.5)+91),
                                 children: List.generate(
                                   favoriteModel.length,
                                       (index) => buildGridProduct(favoriteModel[index], context, favorites, true
@@ -84,27 +84,35 @@ class FavoritesScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        fallback: (context) => Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Center(
-                              child: Text(
-                                'You didn\'t add any products to your favorite yet !',
-                                style: TextStyle(
-                                    color: defaultColor,
-                                    fontSize: 17
+                        fallback: (context) => Builder(
+                          builder: (context) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(
+                                      'You didn\'t add any products to your favorite yet !',
+                                      style: TextStyle(
+                                          color: defaultColor,
+                                          fontSize: 17
+                                      )
+
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(height: 20,),
-                            defaultButton(
-                                function: ()
-                                {
-                                  navigateAndFinish(context, const AppLayout());
-                                },
-                                text: 'Continue Shopping'
-                            ),
-                          ],
+                                const SizedBox(height: 20,),
+                                defaultButton(
+                                    function: ()
+                                    {
+                                      navigateAndFinish(context, const AppLayout());
+                                    },
+                                    text: 'Continue Shopping'
+                                ),
+                              ],
+                            );
+                          }
                         ),
                       )
                     ),

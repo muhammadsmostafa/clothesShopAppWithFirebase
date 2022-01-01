@@ -42,7 +42,7 @@ class ChangePasswordScreen extends StatelessWidget {
                 [
                   SizedBox(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.07,
+                    height: 50,
                     child: Row(
                       children:
                       [

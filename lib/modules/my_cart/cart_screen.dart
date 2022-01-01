@@ -31,7 +31,7 @@ class MyCartScreen extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.07,
+                    height: 50,
                     child: Row(
                       children:
                       [
@@ -83,11 +83,14 @@ class MyCartScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Center(
-                                child: Text(
-                                  'You didn\'t add any products to your cart yet !',
-                                  style: TextStyle(
-                                      color: defaultColor,
-                                      fontSize: 17
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Text(
+                                    'You didn\'t add any products to your cart yet !',
+                                    style: TextStyle(
+                                        color: defaultColor,
+                                        fontSize: 17
+                                    ),
                                   ),
                                 ),
                               ),
