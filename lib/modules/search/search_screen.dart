@@ -44,7 +44,7 @@ class SearchScreen extends StatelessWidget {
                           controller: searchController,
                           onSubmitted: (value)
                           {
-                            AppCubit.get(context).getSearch(searchWord: searchController.text);
+                            AppCubit.get(context).getSearch(searchWord: searchController.text.toLowerCase());
                           },
                         ),
                       ),
