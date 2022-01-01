@@ -786,4 +786,23 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppChangePasswordErrorState());
     });
   }
+  
+  List<ProductModel> searchModel=[];
+  void getSearch({
+    required String searchWord,
+  })
+  {
+    searchModel=[];
+    FirebaseFirestore.instance
+    .collection('products')
+    .snapshots()
+    .listen((event) {
+      for (var element in event.docs) {
+        if(element.data().toString().toLowerCase().contains(searchWord))
+          {
+            searchModel.add(ProductModel.fromJson(element.data()));
+          }
+        emit(AppGetSearchSuccessState());
+      }});
+  }
 }

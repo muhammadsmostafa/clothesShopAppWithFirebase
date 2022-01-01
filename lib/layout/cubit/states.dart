@@ -163,3 +163,5 @@ class AppChangePasswordLoadingState extends AppStates {}
 class AppChangePasswordSuccessState extends AppStates {}
 
 class AppChangePasswordErrorState extends AppStates {}
+
+class AppGetSearchSuccessState extends AppStates {}
