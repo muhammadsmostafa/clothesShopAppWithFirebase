@@ -3,6 +3,7 @@ import 'package:clothes_shop_app/models/address_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
 import 'package:clothes_shop_app/modules/edit_product/edit_product_screen.dart';
 import 'package:clothes_shop_app/modules/manage_address/edit_address_screen.dart';
+import 'package:clothes_shop_app/modules/my_cart/place_order_screen.dart';
 import 'package:clothes_shop_app/modules/product/product_screen.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
 import 'package:clothes_shop_app/shared/styles/icon_broken.dart';
@@ -375,7 +376,9 @@ Widget myDivider() => Padding (
 Widget buildAddressItem (context, AddressModel model, bool cartScreen) => InkWell(
   onTap: cartScreen
   ? ()
-  {}
+  {
+    navigateTo(context, PlaceOrderScreen(model: model));
+  }
   : ()
   {
     navigateTo(context, EditAddressScreen(model: model));
