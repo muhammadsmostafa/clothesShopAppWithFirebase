@@ -1,6 +1,8 @@
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
+import 'package:clothes_shop_app/models/address_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
 import 'package:clothes_shop_app/modules/edit_product/edit_product_screen.dart';
+import 'package:clothes_shop_app/modules/manage_address/edit_address_screen.dart';
 import 'package:clothes_shop_app/modules/product/product_screen.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
 import 'package:clothes_shop_app/shared/styles/icon_broken.dart';
@@ -366,6 +368,62 @@ Widget myDivider() => Padding (
       width: double.infinity,
       height: 1.0,
       color: Colors.grey[300],
+    ),
+  ),
+);
+
+Widget buildAddressItem (context, AddressModel model, bool cartScreen) => InkWell(
+  onTap: cartScreen
+  ? ()
+  {}
+  : ()
+  {
+    navigateTo(context, EditAddressScreen(model: model));
+  },
+  child:Padding(
+    padding: const EdgeInsets.symmetric(
+        horizontal: 10
+    ),
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: const BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
+      child:   Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            const Icon(
+              IconBroken.Home,
+              color: defaultColor,
+            ),
+            const SizedBox(width: 10,),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:
+                [
+                  Text('${model.streetName}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: defaultColor,
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  Text(
+                    '${model.area}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     ),
   ),
 );

@@ -3,6 +3,7 @@ import 'package:clothes_shop_app/layout/app_layout.dart';
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/models/cart_model.dart';
+import 'package:clothes_shop_app/modules/manage_address/add_new_address_screen.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
 import 'package:clothes_shop_app/shared/styles/icon_broken.dart';
@@ -126,7 +127,63 @@ class MyCartScreen extends StatelessWidget {
                         const SizedBox(height: 10,),
                         defaultButton(
                           function: ()
-                          {},
+                          {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) => Container(
+                                  width: double.infinity,
+                                  height: MediaQuery.of(context).size.height * 0.4,
+                                  decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                  child: SingleChildScrollView(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children:
+                                         [
+                                          const Center(
+                                            child: Text(
+                                                'Choose delivery location',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                          ),
+                                           const SizedBox(
+                                             height: 15,
+                                           ),
+                                           AppCubit.get(context).addresses.isNotEmpty
+                                           ?
+                                           ListView.separated(
+                                               shrinkWrap: true,
+                                               physics: const NeverScrollableScrollPhysics(),
+                                               itemBuilder: (context, index) => buildAddressItem(context, AppCubit.get(context).addresses[index], true),
+                                               separatorBuilder: (context, index) => const SizedBox(height: 15,),
+                                               itemCount: AppCubit.get(context).addresses.length
+                                           )
+                                           :
+                                           const SizedBox(),
+                                           const SizedBox(height: 15,),
+                                           Center(
+                                             child: defaultButton(
+                                                 function: ()
+                                                 {
+                                                   navigateTo(context, const AddNewAddressScreen());
+                                                 },
+                                                 text: 'add new address'
+                                             ),
+                                           ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                            ));
+                          },
                           text: 'checkout',
                         ),
                         const SizedBox(height: 10,),

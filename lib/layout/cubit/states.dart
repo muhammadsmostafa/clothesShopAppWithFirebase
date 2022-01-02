@@ -167,3 +167,27 @@ class AppChangePasswordErrorState extends AppStates {}
 class AppGetSearchSuccessState extends AppStates {}
 
 class AppSetState extends AppStates {}
+
+class AppAddAddressSuccessState extends AppStates {}
+
+class AppAddAddressErrorState extends AppStates {}
+
+class AppAddAddressLoadingState extends AppStates {}
+
+class AppUpdateAddressSuccessState extends AppStates {}
+
+class AppUpdateAddressErrorState extends AppStates {}
+
+class AppUpdateAddressLoadingState extends AppStates {}
+
+class AppDeleteAddressSuccessState extends AppStates {}
+
+class AppDeleteAddressErrorState extends AppStates {}
+
+class AppDeleteAddressLoadingState extends AppStates {}
+
+class AppGetAddressesSuccessState extends AppStates {}
+
+class AppGetAddressesErrorState extends AppStates {}
+
+class AppGetAddressesLoadingState extends AppStates {}

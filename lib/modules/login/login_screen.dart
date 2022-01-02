@@ -40,6 +40,7 @@ class LoginScreen extends StatelessWidget {
                 AppCubit.get(context).getFavorites();
                 AppCubit.get(context).getCart();
                 AppCubit.get(context).getAdmins();
+                AppCubit.get(context).getAddresses();
                 showToast(
                   message: 'Login Successfully',
                 );

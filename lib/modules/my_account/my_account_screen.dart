@@ -2,6 +2,7 @@ import 'package:clothes_shop_app/layout/app_layout.dart';
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/modules/change_password/change_password_screen.dart';
+import 'package:clothes_shop_app/modules/manage_address/manage_address_screen.dart';
 import 'package:clothes_shop_app/modules/my_account/edit_profile_screen.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
@@ -144,9 +145,11 @@ class MyAccountScreen extends StatelessWidget {
                           const SizedBox(height: 30,),
                           buildItem(
                             icon: IconBroken.Location,
-                            text: 'Manage Address',
+                            text: 'Manage Addresses',
                             onTap: ()
-                            {},
+                            {
+                              navigateTo(context, const ManageAddress());
+                            },
                           ),
                         ],
                       )

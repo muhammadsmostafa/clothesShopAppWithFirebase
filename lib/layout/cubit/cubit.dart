@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
+import 'package:clothes_shop_app/models/address_model.dart';
 import 'package:clothes_shop_app/models/cart_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
 import 'package:clothes_shop_app/models/user_model.dart';
@@ -809,5 +810,120 @@ class AppCubit extends Cubit<AppStates> {
   void setState()
   {
     emit(AppSetState());
+  }
+
+  void addNewAddress({
+    required String area,
+    required String streetName,
+    required String buildingName,
+    required String floorNumber,
+    required String apartmentNumber,
+    required String phoneNumber,
+  })
+  {
+    emit(AppAddAddressLoadingState());
+    AddressModel model  = AddressModel(
+        area: area,
+        streetName: streetName,
+        buildingName: buildingName,
+        floorNumber: floorNumber,
+        apartmentNumber: apartmentNumber,
+        phoneNumber: phoneNumber,
+    );
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('addresses')
+        .add(model.toMap()).then((value){
+          addresses.add(model);
+          emit(AppAddAddressSuccessState());
+    }).catchError((error){
+      emit(AppAddAddressErrorState());
+    });
+  }
+
+  void updateAddress({
+    required AddressModel oldModel,
+    required String area,
+    required String streetName,
+    required String buildingName,
+    required String floorNumber,
+    required String apartmentNumber,
+    required String phoneNumber,
+  })
+  {
+    emit(AppUpdateAddressLoadingState());
+    AddressModel model = AddressModel(
+        area: area,
+        streetName: streetName,
+        buildingName: buildingName,
+        floorNumber: floorNumber,
+        apartmentNumber: apartmentNumber,
+        phoneNumber: phoneNumber
+    );
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('addresses')
+        .get()
+        .then((value){
+          for (var element in value.docs) {
+            if(element.data()['area'] == oldModel.area && element.data()['streetName'] == oldModel.streetName)
+              {
+                element.reference.update(model.toMap()).then((value){
+                  addresses.remove(oldModel);
+                  addresses.add(model);
+                  emit(AppUpdateAddressSuccessState());
+                });
+                break;
+              }
+          }}).catchError((error){
+      emit(AppUpdateAddressErrorState());
+    });
+  }
+
+  void deleteAddress({
+    required AddressModel oldModel,
+  })
+  {
+    emit(AppDeleteAddressLoadingState());
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('addresses')
+        .get()
+        .then((value){
+      for (var element in value.docs) {
+        if(element.data()['area'] == oldModel.area && element.data()['streetName'] == oldModel.streetName)
+        {
+          element.reference.delete().then((value){
+            addresses.remove(oldModel);
+            emit(AppDeleteAddressSuccessState());
+          });
+          break;
+        }
+      }}).catchError((error){
+      emit(AppDeleteAddressErrorState());
+    });
+  }
+
+  List <AddressModel> addresses = [];
+  void getAddresses()
+  {
+    addresses=[];
+    emit(AppGetAddressesLoadingState());
+    FirebaseFirestore.instance
+    .collection('users')
+    .doc(uId)
+    .collection('addresses')
+    .get()
+    .then((value){
+      for (var element in value.docs) {
+        addresses.add(AddressModel.fromJson(element.data()));
+      }}).then((value){
+        emit(AppGetAddressesSuccessState());
+    }).catchError((error){
+      emit(AppGetAddressesErrorState());
+    });
   }
 }

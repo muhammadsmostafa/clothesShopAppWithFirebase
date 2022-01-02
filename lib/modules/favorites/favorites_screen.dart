@@ -98,7 +98,6 @@ class FavoritesScreen extends StatelessWidget {
                                           color: defaultColor,
                                           fontSize: 17
                                       )
-
                                     ),
                                   ),
                                 ),
