@@ -228,7 +228,7 @@ class PlaceOrderScreen extends StatelessWidget {
                                     },
                                     text: state is AppPlaceOrderLoadingState
                                     ?
-                                    'Placing Order'
+                                    'Placing Order ...'
                                     :
                                     'Place order'
                                 ),
