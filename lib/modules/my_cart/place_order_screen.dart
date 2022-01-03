@@ -1,3 +1,4 @@
+import 'package:clothes_shop_app/layout/app_layout.dart';
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/models/address_model.dart';
@@ -14,7 +15,36 @@ class PlaceOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,AppStates>(
-      listener: (context, state) {},
+      listener: (context, state)
+      {
+        if(state is AppPlaceOrderSuccessState)
+          {
+            showDialog(
+                context: context,
+                builder: (context)
+                {
+                  return AlertDialog(
+                    title: const Icon(
+                      Icons.done,
+                      size: 30,
+                      color: defaultColor,
+                    ),
+                    content: const Text('Your Order Successfully Placed'),
+                    actions:
+                    [
+                      defaultTextButton(
+                          function: ()
+                          {
+                            navigateAndFinish(context, const AppLayout());
+                          },
+                          text: 'Done'
+                      )
+                    ],
+                  );
+                }
+            );
+          }
+      },
       builder: (context, state)
       {
         return WillPopScope(
@@ -182,7 +212,7 @@ class PlaceOrderScreen extends StatelessWidget {
                               const SizedBox(height: 10,),
                               Center(
                                 child: Text(
-                                  'You Will Pay ${AppCubit.get(context).totalPriceOfCartItems+20} EGP',
+                                  'You Will Pay ${AppCubit.get(context).totalPriceOfCartItems.round()+20} EGP',
                                   style: const TextStyle(
                                     color: defaultColor,
                                     fontSize: 20,
@@ -193,8 +223,14 @@ class PlaceOrderScreen extends StatelessWidget {
                               Center(
                                 child: defaultButton(
                                     function: ()
-                                    {},
-                                    text: 'Place order'
+                                    {
+                                      AppCubit.get(context).placeOrder(model: model, totalPrice: AppCubit.get(context).totalPriceOfCartItems.round()+20);
+                                    },
+                                    text: state is AppPlaceOrderLoadingState
+                                    ?
+                                    'Placing Order'
+                                    :
+                                    'Place order'
                                 ),
                               ),
                             ],

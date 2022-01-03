@@ -191,3 +191,9 @@ class AppGetAddressesSuccessState extends AppStates {}
 class AppGetAddressesErrorState extends AppStates {}
 
 class AppGetAddressesLoadingState extends AppStates {}
+
+class AppPlaceOrderSuccessState extends AppStates {}
+
+class AppPlaceOrderLoadingState extends AppStates {}
+
+class AppPlaceOrderErrorState extends AppStates {}

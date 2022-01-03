@@ -208,7 +208,7 @@ class MyCartScreen extends StatelessWidget {
           height: MediaQuery.of(context).size.width * 0.25,
           width: MediaQuery.of(context).size.width * 0.25,
           fit: BoxFit.cover,
-          image: NetworkImage('${cartModel.productModel!.productMainImage}'
+          image: NetworkImage('${cartModel.productModel.productMainImage}'
           )
       ),
       const SizedBox(width: 10,),
@@ -218,7 +218,7 @@ class MyCartScreen extends StatelessWidget {
           children:
           [
             Text(
-              '${cartModel.productModel!.productName}',
+              '${cartModel.productModel.productName}',
               style: const TextStyle(
                   color: defaultColor,
                   fontSize: 17,
@@ -240,14 +240,14 @@ class MyCartScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '${cartModel.productModel!.price!.round()}'' EGP',
+                  '${cartModel.productModel.price!.round()}'' EGP',
                 ),
-                cartModel.productModel!.discount
+                cartModel.productModel.discount
                 ?
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text(
-                        '${cartModel.productModel!.oldPrice}',
+                        '${cartModel.productModel.oldPrice}',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,

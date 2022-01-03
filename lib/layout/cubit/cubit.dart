@@ -516,9 +516,9 @@ class AppCubit extends Cubit<AppStates> {
         .then((value){
           CartModel cartModelOfThis = cartModel.firstWhere((element)
                   =>
-                  productModel.productId == element.productModel!.productId && size == element.size);
+                  productModel.productId == element.productModel.productId && size == element.size);
           cartModelOfThis.quantity++;
-          totalPriceOfCartItems += cartModelOfThis.productModel!.price!;
+          totalPriceOfCartItems += cartModelOfThis.productModel.price!;
       emit(AppAddToCartSuccessState());
     }).catchError((error){
       FirebaseFirestore.instance
@@ -542,7 +542,7 @@ class AppCubit extends Cubit<AppStates> {
             .set({'quantity' : 1})
             .then((value){
               cartModel.add(cartModelOfThis);
-              totalPriceOfCartItems += cartModelOfThis.productModel!.price!;
+              totalPriceOfCartItems += cartModelOfThis.productModel.price!;
         emit(AppAddToCartSuccessState());
         }).catchError((error){
         emit(AppAddToCartErrorState());
@@ -560,19 +560,19 @@ class AppCubit extends Cubit<AppStates> {
         .collection('users')
         .doc(uId)
         .collection('cart')
-        .doc(thisCartModel.productModel!.productId)
+        .doc(thisCartModel.productModel.productId)
         .collection('sizes')
         .doc(thisCartModel.size)
         .delete()
       .then((value){
       cartModel.remove(thisCartModel);
-      totalPriceOfCartItems -= thisCartModel.productModel!.price! * thisCartModel.quantity;
+      totalPriceOfCartItems -= thisCartModel.productModel.price! * thisCartModel.quantity;
       emit(AppRemoveFromCartSuccessState());
       FirebaseFirestore.instance
       .collection('users')
       .doc(uId)
       .collection('cart')
-      .doc(thisCartModel.productModel!.productId)
+      .doc(thisCartModel.productModel.productId)
       .collection('sizes')
       .get()
       .then((value){
@@ -582,7 +582,7 @@ class AppCubit extends Cubit<AppStates> {
                   .collection('users')
                   .doc(uId)
                   .collection('cart')
-                  .doc(thisCartModel.productModel!.productId)
+                  .doc(thisCartModel.productModel.productId)
                   .delete();
             }
       });
@@ -600,13 +600,13 @@ class AppCubit extends Cubit<AppStates> {
         .collection('users')
         .doc(uId)
         .collection('cart')
-        .doc(cartModel.productModel!.productId)
+        .doc(cartModel.productModel.productId)
         .collection('sizes')
         .doc(cartModel.size)
         .update({'quantity' : FieldValue.increment(1)})
         .then((value){
           cartModel.quantity++;
-          totalPriceOfCartItems += cartModel.productModel!.price!;
+          totalPriceOfCartItems += cartModel.productModel.price!;
       emit(AppIncrementSuccessState());
     }).catchError((error){
       emit(AppIncrementErrorState());
@@ -622,13 +622,13 @@ class AppCubit extends Cubit<AppStates> {
         .collection('users')
         .doc(uId)
         .collection('cart')
-        .doc(cartModel.productModel!.productId)
+        .doc(cartModel.productModel.productId)
         .collection('sizes')
         .doc(cartModel.size)
         .update({'quantity' : cartModel.quantity ==1 ? 1 : FieldValue.increment(-1)})
         .then((value){
       cartModel.quantity--;
-      totalPriceOfCartItems -= cartModel.productModel!.price!;
+      totalPriceOfCartItems -= cartModel.productModel.price!;
       emit(AppDecreaseSuccessState());
     }).catchError((error){
       emit(AppDecreaseErrorState());
@@ -719,7 +719,7 @@ class AppCubit extends Cubit<AppStates> {
     void getTotalPrice()
     {
       for (var element in cartModel) {
-        singleItemPrice = element.productModel!.price! * element.quantity;
+        singleItemPrice = element.productModel.price! * element.quantity;
         totalPriceOfCartItems += singleItemPrice;
       }
     }
@@ -822,6 +822,12 @@ class AppCubit extends Cubit<AppStates> {
   })
   {
     emit(AppAddAddressLoadingState());
+    String documentId = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('upcomingOrders')
+        .doc()
+        .id;
     AddressModel model  = AddressModel(
         area: area,
         streetName: streetName,
@@ -829,12 +835,14 @@ class AppCubit extends Cubit<AppStates> {
         floorNumber: floorNumber,
         apartmentNumber: apartmentNumber,
         phoneNumber: phoneNumber,
+        addressId: documentId,
     );
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
         .collection('addresses')
-        .add(model.toMap()).then((value){
+        .doc(documentId)
+        .set(model.toMap()).then((value){
           addresses.add(model);
           emit(AppAddAddressSuccessState());
     }).catchError((error){
@@ -859,25 +867,19 @@ class AppCubit extends Cubit<AppStates> {
         buildingName: buildingName,
         floorNumber: floorNumber,
         apartmentNumber: apartmentNumber,
-        phoneNumber: phoneNumber
+        phoneNumber: phoneNumber,
+        addressId: oldModel.addressId
     );
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
         .collection('addresses')
-        .get()
-        .then((value){
-          for (var element in value.docs) {
-            if(element.data()['area'] == oldModel.area && element.data()['streetName'] == oldModel.streetName)
-              {
-                element.reference.update(model.toMap()).then((value){
-                  addresses.remove(oldModel);
-                  addresses.add(model);
-                  emit(AppUpdateAddressSuccessState());
-                });
-                break;
-              }
-          }}).catchError((error){
+        .doc(oldModel.addressId)
+        .update(model.toMap()).then((value){
+         addresses.remove(oldModel);
+         addresses.add(model);
+         emit(AppUpdateAddressSuccessState());
+    }).catchError((error){
       emit(AppUpdateAddressErrorState());
     });
   }
@@ -891,18 +893,11 @@ class AppCubit extends Cubit<AppStates> {
         .collection('users')
         .doc(uId)
         .collection('addresses')
-        .get()
-        .then((value){
-      for (var element in value.docs) {
-        if(element.data()['area'] == oldModel.area && element.data()['streetName'] == oldModel.streetName)
-        {
-          element.reference.delete().then((value){
+        .doc(oldModel.addressId)
+        .delete().then((value){
             addresses.remove(oldModel);
             emit(AppDeleteAddressSuccessState());
-          });
-          break;
-        }
-      }}).catchError((error){
+          }).catchError((error){
       emit(AppDeleteAddressErrorState());
     });
   }
@@ -925,5 +920,67 @@ class AppCubit extends Cubit<AppStates> {
     }).catchError((error){
       emit(AppGetAddressesErrorState());
     });
+  }
+
+  void placeOrder({
+  required AddressModel model,
+  required int totalPrice,
+  })
+  {
+    emit(AppPlaceOrderLoadingState());
+    String documentId = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('upcomingOrders')
+        .doc()
+        .id;
+    for (var element in cartModel) {
+          FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .collection('upcomingOrders')
+          .doc(documentId)
+          .collection(element.productModel.productId)
+          .doc('${element.size}')
+          .set({
+          'productName' : element.productModel.productName,
+          'description' : element.productModel.description,
+          'price' : element.productModel.price,
+          'oldPrice' : element.productModel.oldPrice,
+          'productImage' : element.productModel.productMainImage,
+          'quantity': element.quantity,
+          });
+    }
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('upcomingOrders')
+        .doc(documentId)
+        .set({
+      'area' : model.area,
+      'streetName' : model.streetName,
+      'buildingName' : model.buildingName,
+      'floorNumber' : model.floorNumber,
+      'apartmentNumber' : model.apartmentNumber,
+      'phoneNumber' : model.phoneNumber,
+      'orderPrice' : totalPrice,
+    }).then((value){
+      FirebaseFirestore.instance
+      .collection('users')
+      .doc(uId)
+      .collection('cart')
+      .get()
+      .then((value){
+        for (var element in value.docs) {
+          element.reference.delete();
+        }}).then((value){
+        totalPriceOfCartItems = 0;
+        cart = [];
+        cartModel = [];
+        emit(AppPlaceOrderSuccessState());
+      }).catchError((error){
+        emit(AppPlaceOrderErrorState());
+      });
+      });
   }
 }

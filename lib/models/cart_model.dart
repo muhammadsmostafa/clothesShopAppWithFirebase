@@ -2,7 +2,7 @@ import 'package:clothes_shop_app/models/product_model.dart';
 
 class CartModel
 {
-  ProductModel? productModel;
+  late ProductModel productModel;
   String? size;
   int quantity;
 

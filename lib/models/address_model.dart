@@ -6,6 +6,7 @@ class AddressModel
   String? floorNumber;
   String? apartmentNumber;
   String? phoneNumber;
+  String? addressId;
 
   AddressModel({
     required this.area,
@@ -14,6 +15,7 @@ class AddressModel
     required this.floorNumber,
     required this.apartmentNumber,
     required this.phoneNumber,
+    required this.addressId,
   });
 
   AddressModel.fromJson(Map <String, dynamic>? json)
@@ -24,6 +26,7 @@ class AddressModel
     floorNumber = json['floorNumber'];
     apartmentNumber = json['apartmentNumber'];
     phoneNumber = json['phoneNumber'];
+    addressId = json['addressId'];
   }
 
   Map <String, dynamic> toMap()
@@ -35,6 +38,7 @@ class AddressModel
       'floorNumber': floorNumber,
       'apartmentNumber': apartmentNumber,
       'phoneNumber': phoneNumber,
+      'addressId': addressId,
     };
   }
 }
