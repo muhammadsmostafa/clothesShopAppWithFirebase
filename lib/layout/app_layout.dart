@@ -197,13 +197,6 @@ class AppLayout extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 30,),
                                   drawerItem(
-                                    icon: IconBroken.Chat,
-                                    text: 'Help',
-                                    onTap: ()
-                                    {},
-                                  ),
-                                  const SizedBox(height: 30,),
-                                  drawerItem(
                                     icon: IconBroken.Logout,
                                     text: 'Logout',
                                     onTap: ()
