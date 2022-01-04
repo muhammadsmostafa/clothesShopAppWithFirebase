@@ -19,6 +19,7 @@ class PlaceOrderScreen extends StatelessWidget {
       {
         if(state is AppPlaceOrderSuccessState)
           {
+            navigateAndFinish(context, const AppLayout());
             showDialog(
                 context: context,
                 builder: (context)
@@ -35,7 +36,7 @@ class PlaceOrderScreen extends StatelessWidget {
                       defaultTextButton(
                           function: ()
                           {
-                            navigateAndFinish(context, const AppLayout());
+                            Navigator.pop(context);
                           },
                           text: 'Done'
                       )

@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/models/address_model.dart';
 import 'package:clothes_shop_app/models/cart_model.dart';
+import 'package:clothes_shop_app/models/order_address.dart';
+import 'package:clothes_shop_app/models/order_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
 import 'package:clothes_shop_app/models/user_model.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
@@ -942,45 +944,43 @@ class AppCubit extends Cubit<AppStates> {
           .doc(documentId)
           .collection(element.productModel.productId)
           .doc('${element.size}')
-          .set({
-          'productName' : element.productModel.productName,
-          'description' : element.productModel.description,
-          'price' : element.productModel.price,
-          'oldPrice' : element.productModel.oldPrice,
-          'productImage' : element.productModel.productMainImage,
-          'quantity': element.quantity,
-          });
+          .set(
+              OrderModel(
+              productName : element.productModel.productName,
+              description : element.productModel.description,
+              price : element.productModel.price,
+              oldPrice : element.productModel.oldPrice,
+              productMainImage : element.productModel.productMainImage,
+              quantity: element.quantity,
+              discount: element.productModel.discount,
+            ).toMap()
+          );
     }
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
         .collection('upcomingOrders')
         .doc(documentId)
-        .set({
-      'area' : model.area,
-      'streetName' : model.streetName,
-      'buildingName' : model.buildingName,
-      'floorNumber' : model.floorNumber,
-      'apartmentNumber' : model.apartmentNumber,
-      'phoneNumber' : model.phoneNumber,
-      'orderPrice' : totalPrice,
-    }).then((value){
-      FirebaseFirestore.instance
-      .collection('users')
-      .doc(uId)
-      .collection('cart')
-      .get()
-      .then((value){
-        for (var element in value.docs) {
-          element.reference.delete();
-        }}).then((value){
+        .set(
+      OrderAddress(
+        area : model.area,
+        streetName : model.streetName,
+        buildingName : model.buildingName,
+        floorNumber : model.floorNumber,
+        apartmentNumber : model.apartmentNumber,
+        phoneNumber : model.phoneNumber,
+        orderPrice : totalPrice,
+      ).toMap()
+    ).then((value){
+      for (var element in cartModel) {
+        removeFromCart(thisCartModel: element);
+      }
         totalPriceOfCartItems = 0;
         cart = [];
         cartModel = [];
         emit(AppPlaceOrderSuccessState());
       }).catchError((error){
         emit(AppPlaceOrderErrorState());
-      });
       });
   }
 }
