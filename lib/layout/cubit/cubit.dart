@@ -975,9 +975,6 @@ class AppCubit extends Cubit<AppStates> {
       for (var element in cartModel) {
         removeFromCart(thisCartModel: element);
       }
-        totalPriceOfCartItems = 0;
-        cart = [];
-        cartModel = [];
         emit(AppPlaceOrderSuccessState());
       }).catchError((error){
         emit(AppPlaceOrderErrorState());
