@@ -38,7 +38,7 @@ class PlaceOrderScreen extends StatelessWidget {
                           {
                             Navigator.pop(context);
                           },
-                          text: 'Done'
+                          text: 'Okay'
                       )
                     ],
                   );

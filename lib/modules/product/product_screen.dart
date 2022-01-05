@@ -20,7 +20,30 @@ class ProductScreen extends StatelessWidget {
         if(state is AppAddToCartSuccessState)
           {
             AppCubit.get(context).selectedSize=null;
-            showToast(message: 'Added Successfully', time: 1);
+            showDialog(
+                context: context,
+                builder: (context)
+                {
+                  return AlertDialog(
+                    title: const Icon(
+                      Icons.done,
+                      size: 30,
+                      color: defaultColor,
+                    ),
+                    content: const Text('Added Successfully'),
+                    actions:
+                    [
+                      defaultTextButton(
+                          function: ()
+                          {
+                            Navigator.pop(context);
+                          },
+                          text: 'Okay'
+                      )
+                    ],
+                  );
+                }
+            );
           }
         if(state is AppAddToCartErrorState)
         {
