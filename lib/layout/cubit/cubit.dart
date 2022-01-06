@@ -1008,6 +1008,7 @@ class AppCubit extends Cubit<AppStates> {
         .then((value){
       for (var element in value.docs)
       {
+        orderProductModel = [];
         orderModel = (OrderModel.fromJson(element.data()));
         for (var e in orderModel.productsId) {
           element.reference
