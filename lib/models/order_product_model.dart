@@ -7,6 +7,7 @@ class OrderProductModel
   String? productMainImage;
   int? quantity;
   late bool discount;
+  String? size;
 
   OrderProductModel({
     required this.productName,
@@ -16,6 +17,7 @@ class OrderProductModel
     required this.productMainImage,
     required this.discount,
     required this.quantity,
+    required this.size,
   });
 
   OrderProductModel.fromJson(Map <String, dynamic>? json)
@@ -27,6 +29,7 @@ class OrderProductModel
     productMainImage = json['productImage'];
     discount = json['discount'];
     quantity = json['quantity'];
+    size = json['size'];
   }
 
   Map <String, dynamic> toMap()
@@ -39,6 +42,7 @@ class OrderProductModel
       'productImage': productMainImage,
       'discount': discount,
       'quantity': quantity,
+      'size': size,
     };
   }
 }

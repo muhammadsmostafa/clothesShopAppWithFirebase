@@ -5,6 +5,7 @@ import 'package:clothes_shop_app/models/cart_model.dart';
 import 'package:clothes_shop_app/models/order_model.dart';
 import 'package:clothes_shop_app/models/order_product_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
+import 'package:clothes_shop_app/models/upcoming_order_model.dart';
 import 'package:clothes_shop_app/models/user_model.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
 import 'package:clothes_shop_app/shared/components/constants.dart';
@@ -924,11 +925,13 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  List<String> productsId = [];
   void placeOrder({
   required AddressModel model,
   required int totalPrice,
   })
   {
+    productsId = [];
     emit(AppPlaceOrderLoadingState());
     String documentId = FirebaseFirestore.instance
         .collection('users')
@@ -937,6 +940,10 @@ class AppCubit extends Cubit<AppStates> {
         .doc()
         .id;
     for (var element in cartModel) {
+          if(!productsId.contains(element.productModel.productId))
+            {
+              productsId.add(element.productModel.productId);
+            }
           FirebaseFirestore.instance
           .collection('users')
           .doc(uId)
@@ -953,6 +960,7 @@ class AppCubit extends Cubit<AppStates> {
               productMainImage : element.productModel.productMainImage,
               quantity: element.quantity,
               discount: element.productModel.discount,
+              size: element.size,
             ).toMap()
           );
     }
@@ -971,14 +979,50 @@ class AppCubit extends Cubit<AppStates> {
         phoneNumber : model.phoneNumber,
         orderPrice : totalPrice,
         dateTime: Timestamp.now(),
+        productsId: productsId,
       ).toMap()
     ).then((value){
       for (var element in cartModel) {
         removeFromCart(thisCartModel: element);
       }
         emit(AppPlaceOrderSuccessState());
+        getUpcomingOrders();
       }).catchError((error){
         emit(AppPlaceOrderErrorState());
       });
+  }
+
+  List<UpcomingOrderModel> upcomingOrders = [];
+  late OrderModel orderModel;
+  List <OrderProductModel> orderProductModel = [];
+  void getUpcomingOrders()
+  {
+    upcomingOrders = [];
+    emit(AppGetUpcomingOrdersLoadingState());
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('upcomingOrders')
+        .orderBy('dateTime', descending: true)
+        .get()
+        .then((value){
+      for (var element in value.docs)
+      {
+        orderModel = (OrderModel.fromJson(element.data()));
+        for (var e in orderModel.productsId) {
+          element.reference
+              .collection(e)
+              .get()
+              .then((value){
+                for (var element in value.docs) {
+                  orderProductModel.add(OrderProductModel.fromJson(element.data()));
+                }});
+        }
+        upcomingOrders.add(UpcomingOrderModel(orderModel: orderModel, orderProductModel: orderProductModel));
+      }}).then((value){
+      emit(AppGetUpcomingOrdersSuccessState());
+    }).catchError((error){
+      emit(AppGetUpcomingOrdersErrorState());
+    });
   }
 }

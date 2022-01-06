@@ -7,6 +7,7 @@ import 'package:clothes_shop_app/modules/my_account//my_account_screen.dart';
 import 'package:clothes_shop_app/modules/my_cart/cart_screen.dart';
 import 'package:clothes_shop_app/modules/onboarding_and_splash/onboarding_screen.dart';
 import 'package:clothes_shop_app/modules/search/search_screen.dart';
+import 'package:clothes_shop_app/modules/upcoming_orders/upcoming_orders_screen.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
 import 'package:clothes_shop_app/shared/styles/colors.dart';
 import 'package:clothes_shop_app/shared/styles/icon_broken.dart';
@@ -193,7 +194,9 @@ class AppLayout extends StatelessWidget {
                                     icon: Icons.delivery_dining,
                                     text: 'Upcoming Orders',
                                     onTap: ()
-                                    {},
+                                    {
+                                      navigateTo(context, const UpcomingOrderScreen());
+                                    },
                                   ),
                                   const SizedBox(height: 30,),
                                   drawerItem(

@@ -1,5 +1,6 @@
 import 'package:clothes_shop_app/layout/cubit/cubit.dart';
 import 'package:clothes_shop_app/models/address_model.dart';
+import 'package:clothes_shop_app/models/cart_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
 import 'package:clothes_shop_app/modules/edit_product/edit_product_screen.dart';
 import 'package:clothes_shop_app/modules/manage_address/edit_address_screen.dart';
@@ -429,4 +430,140 @@ Widget buildAddressItem (context, AddressModel model, bool cartScreen) => InkWel
       ),
     ),
   ),
+);
+
+Widget buildCartItem(context, CartModel cartModel, bool upcomingScreen) => Row(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    Image(
+        height: MediaQuery.of(context).size.width * 0.25,
+        width: MediaQuery.of(context).size.width * 0.25,
+        fit: BoxFit.cover,
+        image: NetworkImage('${cartModel.productModel.productMainImage}'
+        )
+    ),
+    const SizedBox(width: 10,),
+    Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:
+        [
+          Text(
+            '${cartModel.productModel.productName}',
+            style: const TextStyle(
+                color: defaultColor,
+                fontSize: 17,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Size: ${cartModel.size}',
+            style: const TextStyle(
+              color: defaultColor,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Text(
+                '${cartModel.productModel.price!.round()}'' EGP',
+              ),
+              cartModel.productModel.discount
+                  ?
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  '${cartModel.productModel.oldPrice}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              )
+                  :
+              const SizedBox()
+            ],
+          ),
+        ],
+      ),
+    ),
+    Column(
+      children: [
+        !upcomingScreen
+        ?
+        TextButton(
+            onPressed: ()
+            {
+              AppCubit.get(context).removeFromCart(thisCartModel: cartModel);
+            },
+            child: const Text('Remove'))
+        :
+        const SizedBox(),
+        Row(
+          children: [
+            !upcomingScreen
+            ?
+            IconButton(
+              onPressed: ()
+              {
+                if(cartModel.quantity <= 1)
+                {
+                  showToast(message: 'If you really want to remove this item tap remove', time: 10);
+                }
+                else
+                {
+                  AppCubit.get(context).decreaseCart(cartModel: cartModel);
+                }
+              },
+              icon: CircleAvatar(
+                  radius: 12,
+                  backgroundColor:
+                  defaultColor,
+                  child: Icon(
+                    Icons.remove,
+                    size: 22,
+                    color: Colors.grey[300],
+                  )
+              ),
+            )
+            :
+            const SizedBox(),
+            Text(
+              '${cartModel.quantity}',
+              style: const TextStyle(
+                fontSize: 17,
+              ),
+            ),
+            !upcomingScreen
+            ?
+            IconButton(
+              onPressed: ()
+              {
+                AppCubit.get(context).incrementCart(cartModel: cartModel);
+              },
+              icon: CircleAvatar(
+                  radius: 12,
+                  backgroundColor:
+                  defaultColor,
+                  child: Icon(
+                    Icons.add,
+                    size: 22,
+                    color: Colors.grey[300],
+                  )
+              ),
+            )
+            :
+            const SizedBox(),
+            const SizedBox(width: 5,)
+          ],
+        ),
+      ],
+    ),
+  ],
 );

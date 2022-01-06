@@ -192,6 +192,12 @@ class AppGetAddressesErrorState extends AppStates {}
 
 class AppGetAddressesLoadingState extends AppStates {}
 
+class AppGetUpcomingOrdersSuccessState extends AppStates {}
+
+class AppGetUpcomingOrdersErrorState extends AppStates {}
+
+class AppGetUpcomingOrdersLoadingState extends AppStates {}
+
 class AppPlaceOrderSuccessState extends AppStates {}
 
 class AppPlaceOrderLoadingState extends AppStates {}
