@@ -1,44 +1,50 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class OrderModel
 {
-  String? productName;
-  String? description;
-  double? oldPrice;
-  double? price;
-  String? productMainImage;
-  int? quantity;
-  late bool discount;
+  String? area;
+  String? streetName;
+  String? buildingName;
+  String? floorNumber;
+  String? apartmentNumber;
+  String? phoneNumber;
+  int? orderPrice;
+  Timestamp? dateTime;
 
   OrderModel({
-    required this.productName,
-    required this.description,
-    required this.oldPrice,
-    required this.price,
-    required this.productMainImage,
-    required this.discount,
-    required this.quantity,
+    required this.area,
+    required this.streetName,
+    required this.buildingName,
+    required this.floorNumber,
+    required this.apartmentNumber,
+    required this.phoneNumber,
+    required this.orderPrice,
+    required this.dateTime,
   });
 
   OrderModel.fromJson(Map <String, dynamic>? json)
   {
-    productName = json!['productName'];
-    description = json['description'];
-    price = json['price'];
-    oldPrice = json['oldPrice'];
-    productMainImage = json['productImage'];
-    discount = json['discount'];
-    quantity = json['quantity'];
+    area = json!['area'];
+    streetName = json['streetName'];
+    buildingName = json['buildingName'];
+    floorNumber = json['floorNumber'];
+    apartmentNumber = json['apartmentNumber'];
+    phoneNumber = json['phoneNumber'];
+    orderPrice = json['addressId'];
+    dateTime = json['dateTime'];
   }
 
   Map <String, dynamic> toMap()
   {
     return {
-      'productName': productName,
-      'description': description,
-      'oldPrice': oldPrice,
-      'price': price,
-      'productImage': productMainImage,
-      'discount': discount,
-      'quantity': quantity,
+      'area': area,
+      'streetName': streetName,
+      'buildingName': buildingName,
+      'floorNumber': floorNumber,
+      'apartmentNumber': apartmentNumber,
+      'phoneNumber': phoneNumber,
+      'addressId': orderPrice,
+      'dateTime': dateTime,
     };
   }
 }

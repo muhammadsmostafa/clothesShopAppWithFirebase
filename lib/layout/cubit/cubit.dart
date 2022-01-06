@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:clothes_shop_app/layout/cubit/states.dart';
 import 'package:clothes_shop_app/models/address_model.dart';
 import 'package:clothes_shop_app/models/cart_model.dart';
-import 'package:clothes_shop_app/models/order_address.dart';
 import 'package:clothes_shop_app/models/order_model.dart';
+import 'package:clothes_shop_app/models/order_product_model.dart';
 import 'package:clothes_shop_app/models/product_model.dart';
 import 'package:clothes_shop_app/models/user_model.dart';
 import 'package:clothes_shop_app/shared/components/components.dart';
@@ -945,7 +945,7 @@ class AppCubit extends Cubit<AppStates> {
           .collection(element.productModel.productId)
           .doc('${element.size}')
           .set(
-              OrderModel(
+              OrderProductModel(
               productName : element.productModel.productName,
               description : element.productModel.description,
               price : element.productModel.price,
@@ -962,7 +962,7 @@ class AppCubit extends Cubit<AppStates> {
         .collection('upcomingOrders')
         .doc(documentId)
         .set(
-      OrderAddress(
+      OrderModel(
         area : model.area,
         streetName : model.streetName,
         buildingName : model.buildingName,
@@ -970,6 +970,7 @@ class AppCubit extends Cubit<AppStates> {
         apartmentNumber : model.apartmentNumber,
         phoneNumber : model.phoneNumber,
         orderPrice : totalPrice,
+        dateTime: Timestamp.now(),
       ).toMap()
     ).then((value){
       for (var element in cartModel) {
