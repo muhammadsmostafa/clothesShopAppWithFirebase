@@ -925,13 +925,13 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  List<String> productsId = [];
+  List<Map<String, dynamic>> orderProducts = [];
   void placeOrder({
   required AddressModel model,
   required int totalPrice,
   })
   {
-    productsId = [];
+    orderProducts = [];
     emit(AppPlaceOrderLoadingState());
     String documentId = FirebaseFirestore.instance
         .collection('users')
@@ -940,29 +940,17 @@ class AppCubit extends Cubit<AppStates> {
         .doc()
         .id;
     for (var element in cartModel) {
-          if(!productsId.contains(element.productModel.productId))
-            {
-              productsId.add(element.productModel.productId);
-            }
-          FirebaseFirestore.instance
-          .collection('users')
-          .doc(uId)
-          .collection('upcomingOrders')
-          .doc(documentId)
-          .collection(element.productModel.productId)
-          .doc('${element.size}')
-          .set(
-              OrderProductModel(
-              productName : element.productModel.productName,
-              description : element.productModel.description,
-              price : element.productModel.price,
-              oldPrice : element.productModel.oldPrice,
-              productMainImage : element.productModel.productMainImage,
-              quantity: element.quantity,
-              discount: element.productModel.discount,
-              size: element.size,
-            ).toMap()
-          );
+      orderProducts.add(
+      OrderProductModel(
+        productName : element.productModel.productName,
+        description : element.productModel.description,
+        price : element.productModel.price,
+        oldPrice : element.productModel.oldPrice,
+        productMainImage : element.productModel.productMainImage,
+        quantity: element.quantity,
+        discount: element.productModel.discount,
+        size: element.size,
+      ).toMap());
     }
     FirebaseFirestore.instance
         .collection('users')
@@ -979,7 +967,7 @@ class AppCubit extends Cubit<AppStates> {
         phoneNumber : model.phoneNumber,
         orderPrice : totalPrice,
         dateTime: Timestamp.now(),
-        productsId: productsId,
+        products: orderProducts,
       ).toMap()
     ).then((value){
       for (var element in cartModel) {
@@ -993,8 +981,8 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   List<UpcomingOrderModel> upcomingOrders = [];
-  late OrderModel orderModel;
-  List <OrderProductModel> orderProductModel = [];
+  List<OrderProductModel> orderProductModel = [];
+  List<dynamic> products = [];
   void getUpcomingOrders()
   {
     upcomingOrders = [];
@@ -1006,21 +994,20 @@ class AppCubit extends Cubit<AppStates> {
         .orderBy('dateTime', descending: true)
         .get()
         .then((value){
-      for (var element in value.docs)
-      {
-        orderProductModel = [];
-        orderModel = (OrderModel.fromJson(element.data()));
-        for (var e in orderModel.productsId) {
-          element.reference
-              .collection(e)
-              .get()
-              .then((value){
-                for (var element in value.docs) {
-                  orderProductModel.add(OrderProductModel.fromJson(element.data()));
-                }});
-        }
-        upcomingOrders.add(UpcomingOrderModel(orderModel: orderModel, orderProductModel: orderProductModel));
-      }}).then((value){
+          for (var element in value.docs)
+          {
+            products = element.data()['products'];
+            orderProductModel = [];
+            for (var e in products) {
+              orderProductModel.add(OrderProductModel.fromJson(e));
+            }
+            upcomingOrders.add(
+                UpcomingOrderModel(
+                    orderModel: OrderModel.fromJson(element.data()),
+                    orderProductModel: orderProductModel
+                ));
+          }
+    }).then((value){
       emit(AppGetUpcomingOrdersSuccessState());
     }).catchError((error){
       emit(AppGetUpcomingOrdersErrorState());

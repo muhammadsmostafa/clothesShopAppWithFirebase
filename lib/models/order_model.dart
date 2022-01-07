@@ -10,7 +10,7 @@ class OrderModel
   String? phoneNumber;
   int? orderPrice;
   Timestamp? dateTime;
-  late List<dynamic> productsId;
+  late List<Map<String, dynamic>> products;
 
   OrderModel({
     required this.area,
@@ -21,7 +21,7 @@ class OrderModel
     required this.phoneNumber,
     required this.orderPrice,
     required this.dateTime,
-    required this.productsId,
+    required this.products,
   });
 
   OrderModel.fromJson(Map <String, dynamic>? json)
@@ -34,7 +34,7 @@ class OrderModel
     phoneNumber = json['phoneNumber'];
     orderPrice = json['orderPrice'];
     dateTime = json['dateTime'];
-    productsId = json['productsId'];
+    //can't get products here get it by another call
   }
 
   Map <String, dynamic> toMap()
@@ -48,7 +48,7 @@ class OrderModel
       'phoneNumber': phoneNumber,
       'orderPrice': orderPrice,
       'dateTime': dateTime,
-      'productsId': productsId,
+      'products': products,
     };
   }
 }

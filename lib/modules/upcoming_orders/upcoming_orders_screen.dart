@@ -129,7 +129,7 @@ Widget buildOrderItem(context, UpcomingOrderModel model) => InkWell(
         horizontal: 10
     ),
     child: Container(
-      height: 40,
+      height: 60,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: const BorderRadius.all(
@@ -152,12 +152,13 @@ Widget buildOrderItem(context, UpcomingOrderModel model) => InkWell(
                       color: defaultColor,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     '${model.orderModel.orderPrice}'' EGP',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(width: 10,)
                 ],
               ),
             ),
