@@ -340,6 +340,10 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> logout()
   async {
+    favorites = [];
+    upcomingOrders = [];
+    cartModel = [];
+    addresses = [];
     emit(AppLogoutLoadingState());
       CasheHelper.saveData(key: 'uId', value: '');
       uId = '';
